@@ -3,8 +3,9 @@
   <script>
     var count = 0
     function reloadtime() {
-      count++
-      document.getElementById("reload").innerHTML="reload time "+count;
+      count++;
+      var text = "reload time "+count;
+      document.getElementById("reload").innerHTML=text;
     }
     function sayinfo() {
       document.getElementById("say").innerHTML="device info id:"+viewController.sayHello();

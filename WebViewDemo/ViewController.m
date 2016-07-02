@@ -7,9 +7,6 @@
 //
 
 #import "ViewController.h"
-
-//#import "UIWebView+JSContext.h"
-//#import "UIWebView.h"
 #import "UIWebView+JavaScript.h"
 
 @protocol JSViewController<JSExport>
@@ -30,7 +27,7 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-    self.title = @"JavaScript Demo";
+    self.title = @"WebView Demo";
     self.edgesForExtendedLayout = 0;
     webView = [[UIWebView alloc]initWithFrame:self.view.frame];
     webView.delegate = self;
@@ -43,15 +40,15 @@
 
 - (void)configJSContextForWebView:(UIWebView*)_webView {
     void (^push)() = ^{
-        dispatch_async( dispatch_get_main_queue(), ^{
+        DO_TASK_IN_MAIN_QUEUE(
             [self.navigationController pushViewController:[ViewController new] animated:YES];
-        });
+        );
     };
     
     void (^reload)() = ^{
-        dispatch_async( dispatch_get_main_queue(), ^{
+        DO_TASK_IN_MAIN_QUEUE(
             [_webView reload];
-        });
+        );
     };
     
     [_webView addJavaScripInterfaces:push withJSObejectNameOrFunctionName:@"push"];
@@ -77,7 +74,13 @@
                         @"say Hello iOS",
                         @"say Hello Android",
                         @"say Hello Node.js" ];
-    return array[(arc4random() % 4)];
+    NSString *message = array[(arc4random() % 4)];
+    [[[UIAlertView alloc] initWithTitle:@"Hello Demo"
+                               message:message
+                              delegate:nil
+                     cancelButtonTitle:@"取消"
+                     otherButtonTitles:@"确定", nil] show];
+    return message;
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView {
