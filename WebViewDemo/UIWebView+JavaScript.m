@@ -12,21 +12,10 @@
 @interface UIWebView_JavaScript_Proxy : NSObject
 
 @property (nonatomic, strong) NSMutableDictionary *interfaces;
-//@property (nonatomic, readonly) UIWebView *webView;
-//
-//- (instancetype)initWebView:(UIWebView *)webView;
 
 @end
 
 @implementation UIWebView_JavaScript_Proxy
-
-//- (instancetype)initWebView:(UIWebView *)webView {
-//    self = [super init];
-//    if ( self ) {
-//        _webView = webView;
-//    }
-//    return self;
-//}
 
 - (NSMutableDictionary *)interfaces {
     if ( _interfaces == nil ) {
@@ -49,8 +38,7 @@
     
     if (class_addMethod(c, selector, method_getImplementation(otherMethod), method_getTypeEncoding(otherMethod))) {
         class_replaceMethod(c, otherSelector, method_getImplementation(originalMethod), method_getTypeEncoding(originalMethod));
-    }
-    else {
+    } else {
         method_exchangeImplementations(originalMethod, otherMethod);
     }
 }
@@ -69,7 +57,6 @@ static char kUIWebView_JavaScript_Proxy_key;
 }
 
 - (void)setCustomDelegate:(id <UIWebViewDelegate>)delegate {
-//    [self setWebViewProxy:[[UIWebView_JavaScript_Proxy alloc] initWebView:self]];
     [self setWebViewProxy:[[UIWebView_JavaScript_Proxy alloc] init]];
     [self setCustomDelegate:delegate];
 }
@@ -85,6 +72,11 @@ static char kUIWebView_JavaScript_Proxy_key;
         proxy.interfaces[name] = interface;
         [self.jsContext setObject:interface forKeyedSubscript:name];
     }
+    
+    self.jsContext.exceptionHandler = ^(JSContext *context, JSValue *exceptionValue) {
+        context.exception = exceptionValue;
+        NSLog(@"异常信息：%@", exceptionValue);
+    };
 }
 
 @end

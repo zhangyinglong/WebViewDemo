@@ -8,17 +8,45 @@
       document.getElementById("reload").innerHTML=text;
     }
     function sayinfo() {
-      document.getElementById("say").innerHTML="device info id:"+viewController.sayHello();
+        document.getElementById("say").innerHTML="device info id:"+bridge.sayHello();
+    }
+    function js_console() {
+        bridge.log("button onclick");
+    }
+    function getHttpRequest() {
+        var params = { name:"name", "sex":"sex" }
+        bridge.getRequest("http://www.baidu.com",
+                          params,
+                          function(response) {
+                            alert(response)
+                          });
+    }
+  
+    function postHttpRequest() {
+        var params = { name:"name", "sex":"sex" }
+        bridge.getRequest("http://www.baidu.com",
+                          params,
+                          function(response) {
+                            alert(response)
+                          });
+    }
+    function router(path) {
+        bridge.router(path);
+    }
+    function callObjC(response) {
+        bridge.callObjC("welcom callObjC");
     }
   </script>
 </head>
 <body>
   
     <p><button type='button' onclick='push()'>push</button></p>
-
     <p><button type='button' id='reload' onclick='reloadtime()'>reload</button></p>
-    
+    <p><button type='button' onclick='js_console()'>console</button></p>
+    <p><button type='button' onclick='getHttpRequest()'>getHttpRequest</button></p>
+    <p><button type='button' onclick='postHttpRequest()'>postHttpRequest</button></p>
     <p><button type='button' onclick='sayinfo()'>say info</button></p>
+    <p><button type='button' onclick='router("chinahr://goBack")'>router</button></p>
     <p id='say' ></p>
     
 </body>

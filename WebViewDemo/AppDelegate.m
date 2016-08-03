@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "ViewController.h"
+#import "RootoViewController.h"
 
 @interface AppDelegate ()
 
@@ -18,9 +18,14 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    
+    // 设置网络缓存
+    NSURLCache *urlCache = [[NSURLCache alloc] initWithMemoryCapacity:4*1024*1024 diskCapacity:20*1024*1024 diskPath:nil];
+    [NSURLCache setSharedURLCache:urlCache];
+    
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
-    UINavigationController *navigationBar = [[UINavigationController alloc]initWithRootViewController:[ViewController new]];
+    UINavigationController *navigationBar = [[UINavigationController alloc] initWithRootViewController:[RootoViewController new]];
     self.window.rootViewController = navigationBar;
     [self.window makeKeyAndVisible];
     return YES;
@@ -46,6 +51,11 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
+    // 清空缓存释放资源
+    [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
 
 @end

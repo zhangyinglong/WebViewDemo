@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <JavaScriptCore/JavaScriptCore.h>
+#import "JavaScripService.h"
 
 #define DO_TASK_IN_MAIN_QUEUE(exp) do { \
                                        dispatch_async(dispatch_get_main_queue(), ^{ \
